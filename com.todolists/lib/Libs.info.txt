@@ -1,4 +1,5 @@
 Download
 - glazedlists_java15-1.9.0.jar 
 - sqlite-jdbc-3.16.1.jar
+- commons-codex-1.10.jar
 to this folder : todolist/com.todolists/lib
