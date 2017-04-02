@@ -1,0 +1,22 @@
+[INFO] Scanning for projects...
+[INFO] Computing target platform for MavenProject: todolists:com.todolists:1.0.0-SNAPSHOT @ D:\Eclipse\eclipse-SDK-4.5.1-win32-x86_64\todolists\com.todolists\pom.xml
+[INFO] Fetching p2.index from http://download.eclipse.org/releases/mars/ (0B at 0B/s)
+[INFO] Adding repository http://download.eclipse.org/releases/mars
+[INFO] Fetching p2.index from http://download.eclipse.org/technology/epp/packages/mars/ (0B at 0B/s)
+[INFO] Fetching p2.index from http://download.eclipse.org/releases/mars/201506241002/ (0B at 0B/s)
+[INFO] Fetching p2.index from http://download.eclipse.org/releases/mars/201510021000/ (0B at 0B/s)
+[INFO] Fetching p2.index from http://download.eclipse.org/releases/mars/201602261000/ (0B at 0B/s)
+[INFO] Resolving dependencies of MavenProject: todolists:com.todolists:1.0.0-SNAPSHOT @ D:\Eclipse\eclipse-SDK-4.5.1-win32-x86_64\todolists\com.todolists\pom.xml
+[INFO] {osgi.os=linux, osgi.ws=gtk, org.eclipse.update.install.features=true, osgi.arch=x86_64}
+[ERROR] Cannot resolve project dependencies:
+[ERROR]   Software being installed: com.todolists 1.0.0.qualifier
+[ERROR]   Missing requirement: com.todolists 1.0.0.qualifier requires 'bundle org.eclipse.nebula.widgets.nattable.extension.e4 0.0.0' but it could not be found
+[ERROR] 
+[ERROR] See http://wiki.eclipse.org/Tycho/Dependency_Resolution_Troubleshooting for help.
+[ERROR] Cannot resolve dependencies of MavenProject: todolists:com.todolists:1.0.0-SNAPSHOT @ D:\Eclipse\eclipse-SDK-4.5.1-win32-x86_64\todolists\com.todolists\pom.xml: See log for details -> [Help 1]
+[ERROR] 
+[ERROR] To see the full stack trace of the errors, re-run Maven with the -e switch.
+[ERROR] Re-run Maven using the -X switch to enable full debug logging.
+[ERROR] 
+[ERROR] For more information about the errors and possible solutions, please read the following articles:
+[ERROR] [Help 1] http://cwiki.apache.org/confluence/display/MAVEN/MavenExecutionException

@@ -1,0 +1,14 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: Model
+Bundle-SymbolicName: com.todolists.model
+Bundle-Version: 1.0.0.qualifier
+Bundle-Vendor: TODOLISTS
+Bundle-RequiredExecutionEnvironment: JavaSE-1.8
+Require-Bundle: org.eclipse.core.resources
+Export-Package: com.todolists.datamodel,
+ com.todolists.factory,
+ com.todolists.model
+Bundle-ActivationPolicy: lazy
+Service-Component: OSGI-INF/component.xml
+Import-Package: org.slf4j

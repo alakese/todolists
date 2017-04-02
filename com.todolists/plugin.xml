@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.4"?>
+<plugin>
+
+   <extension
+         id="product"
+         point="org.eclipse.core.runtime.products">
+      <product
+            application="org.eclipse.e4.ui.workbench.swt.E4Application"
+            name="TodoLists">
+         <property
+               name="appName"
+               value="TodoLists">
+         </property>
+         <property
+               name="aboutImage"
+               value="icons/branding.png">
+         </property>
+         <property
+               name="aboutText"
+               value="Batman thinks of everything... never forget that">
+         </property>
+         <property
+               name="windowImages"
+               value="icons/branding.png">
+         </property>
+      </product>
+   </extension>
+   <extension
+         id="MyNature"
+         point="org.eclipse.core.resources.natures">
+      <runtime>
+         <run
+               class="com.todolists.natures.MyNature">
+         </run>
+      </runtime>
+   </extension>
+
+</plugin>

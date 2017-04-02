@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?pde version="3.5"?>
+
+<product name="TodoLists" uid="com.todolists.product" id="com.todolists.product" application="org.eclipse.e4.ui.workbench.swt.E4Application" version="1.0.0" useFeatures="true" includeLaunchers="true">
+
+   <aboutInfo>
+      <image path="/com.todolists/icons/branding.png"/>
+      <text>
+         Batman thinks of everything... never forget that
+      </text>
+   </aboutInfo>
+
+   <configIni use="default">
+   </configIni>
+
+   <launcherArgs>
+      <programArgs>-clearPersistedState
+      </programArgs>
+      <vmArgsMac>-XstartOnFirstThread -Dorg.eclipse.swt.internal.carbon.smallFonts
+      </vmArgsMac>
+   </launcherArgs>
+
+   <windowImages i128="/com.todolists/icons/branding.png"/>
+
+   <splash
+      location="com.todolists" />
+   <launcher name="Todo's">
+      <solaris/>
+      <win useIco="false">
+         <bmp/>
+      </win>
+   </launcher>
+
+   <vm>
+   </vm>
+
+   <plugins>
+   </plugins>
+
+   <features>
+      <feature id="com.todolists.feature"/>
+      <feature id="org.eclipse.e4.rcp"/>
+      <feature id="org.eclipse.emf.common"/>
+      <feature id="org.eclipse.emf.ecore"/>
+      <feature id="org.eclipse.rcp"/>
+   </features>
+
+   <configurations>
+      <plugin id="com.todolists.logging.config" autoStart="true" startLevel="0" />
+      <plugin id="org.eclipse.core.runtime" autoStart="true" startLevel="0" />
+      <plugin id="org.eclipse.equinox.common" autoStart="true" startLevel="2" />
+      <plugin id="org.eclipse.equinox.ds" autoStart="true" startLevel="2" />
+      <plugin id="org.eclipse.equinox.event" autoStart="true" startLevel="2" />
+      <plugin id="org.eclipse.equinox.p2.reconciler.dropins" autoStart="true" startLevel="0" />
+      <plugin id="org.eclipse.equinox.simpleconfigurator" autoStart="true" startLevel="1" />
+   </configurations>
+
+   <preferencesInfo>
+      <targetfile overwrite="false"/>
+   </preferencesInfo>
+
+   <cssInfo>
+   </cssInfo>
+
+</product>

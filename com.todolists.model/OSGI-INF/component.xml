@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<scr:component xmlns:scr="http://www.osgi.org/xmlns/scr/v1.1.0" name="Todo provider service">
+   <implementation class="com.todolists.model.service.MyTodoServiceProviderImpl"/>
+   <service>
+      <provide interface="com.todolists.model.ITodoServiceProvider"/>
+   </service>
+</scr:component>

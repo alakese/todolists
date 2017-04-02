@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="ASCII"?>
+<application:Application xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:application="http://www.eclipse.org/ui/2010/UIModel/application" xmlns:basic="http://www.eclipse.org/ui/2010/UIModel/application/ui/basic" xmlns:menu="http://www.eclipse.org/ui/2010/UIModel/application/ui/menu" xmi:id="_iZFK4JvCEea4BfF-DHnP4A" elementId="com.todolists.application">
+  <children xsi:type="basic:TrimmedWindow" xmi:id="_jbd08JvCEea4BfF-DHnP4A" elementId="com.todolists.trimmedwindow.mainwindow" label="Todo Lists" x="100" y="100" width="600" height="400">
+    <children xsi:type="basic:PartSashContainer" xmi:id="_v30n8JvCEea4BfF-DHnP4A" elementId="com.todolists.partsashcontainer.0" horizontal="true">
+      <children xsi:type="basic:PartStack" xmi:id="_wx-jEJvCEea4BfF-DHnP4A" elementId="com.todolists.partstack.projects">
+        <children xsi:type="basic:Part" xmi:id="_xdwrAJvCEea4BfF-DHnP4A" elementId="com.todolists.part.projects" contributionURI="bundleclass://com.todolists/com.todolists.parts.ProjectsPart" label="Projects">
+          <menus xsi:type="menu:PopupMenu" xmi:id="_bqVfwKebEea32f_jy4otqw" elementId="com.todolists.popupmenu.projectpopup.newproject" label="Project contextmenu new project">
+            <children xsi:type="menu:HandledMenuItem" xmi:id="_vDfs0KebEea32f_jy4otqw" elementId="com.todolists.handledmenuitem.newproject" label="New project..." command="_W3zqoJvDEea4BfF-DHnP4A"/>
+          </menus>
+          <menus xsi:type="menu:PopupMenu" xmi:id="_D3jfsKeeEea32f_jy4otqw" elementId="com.todolists.popupmenu.projectpopup.closeproject" label="Project contextmenu close project">
+            <children xsi:type="menu:HandledMenuItem" xmi:id="_QCQiAKeeEea32f_jy4otqw" elementId="com.todolists.handledmenuitem.deleteproject" label="Delete project" command="_lPjboKedEea32f_jy4otqw"/>
+            <children xsi:type="menu:HandledMenuItem" xmi:id="__vubMKmsEeaqitUZEC3Sew" elementId="com.todolists.handledmenuitem.closeproject" label="Close project" command="_CtudYKmtEeaqitUZEC3Sew"/>
+            <children xsi:type="menu:HandledMenuItem" xmi:id="_jUaxEKuBEea7IeZ9V35Y-A" elementId="com.todolists.handledmenuitem.createtable" label="Create table" command="_qjSykKuBEea7IeZ9V35Y-A"/>
+          </menus>
+          <menus xsi:type="menu:PopupMenu" xmi:id="_qc-Z0KmtEeaqitUZEC3Sew" elementId="com.todolists.popupmenu.projectpopup.openproject" label="Project contextmenu open project">
+            <children xsi:type="menu:HandledMenuItem" xmi:id="_vqXEsKmtEeaqitUZEC3Sew" elementId="com.todolists.handledmenuitem.openproject" label="Open project" command="_x3Fa8KmtEeaqitUZEC3Sew"/>
+            <children xsi:type="menu:HandledMenuItem" xmi:id="_1bUyMKm3EeaqitUZEC3Sew" elementId="com.todolists.handledmenuitem.deleteproject" label="Delete project" command="_lPjboKedEea32f_jy4otqw"/>
+          </menus>
+          <menus xsi:type="menu:PopupMenu" xmi:id="_p1TLQLD_Eea3TOOsULhG-Q" elementId="com.todolists.popupmenu.filecontextmenu" label="File contextmenu">
+            <children xsi:type="menu:HandledMenuItem" xmi:id="_tQJhgLD_Eea3TOOsULhG-Q" elementId="com.todolists.handledmenuitem.opentable" label="Open table" command="_wRqxwLD_Eea3TOOsULhG-Q"/>
+            <children xsi:type="menu:HandledMenuItem" xmi:id="_UP9cMLS9EeaREoFAUxOmQA" elementId="com.todolists.handledmenuitem.deletetable" label="Delete table" command="_YIJOsLS9EeaREoFAUxOmQA"/>
+          </menus>
+        </children>
+      </children>
+      <children xsi:type="basic:PartStack" xmi:id="_5wk1wJvCEea4BfF-DHnP4A" elementId="com.todolists.partstack.tables"/>
+    </children>
+    <mainMenu xmi:id="_g5Lo8JvDEea4BfF-DHnP4A" elementId="com.todolists.menu.0">
+      <children xsi:type="menu:Menu" xmi:id="_siHa8JvDEea4BfF-DHnP4A" elementId="com.todo.list.menu.project" label="Project">
+        <children xsi:type="menu:HandledMenuItem" xmi:id="_hkkvUJvDEea4BfF-DHnP4A" elementId="com.todolists.handledmenuitem.newproject" label="New..." command="_W3zqoJvDEea4BfF-DHnP4A"/>
+        <children xsi:type="menu:MenuSeparator" xmi:id="_yZn-8Km7EeaqitUZEC3Sew" elementId="com.todolists.menuseparator.0"/>
+        <children xsi:type="menu:HandledMenuItem" xmi:id="_M6adYKm5EeaqitUZEC3Sew" elementId="com.todolists.handledmenuitem.open" label="Open" command="_x3Fa8KmtEeaqitUZEC3Sew"/>
+        <children xsi:type="menu:HandledMenuItem" xmi:id="_PFOkkKm4EeaqitUZEC3Sew" elementId="com.todolists.handledmenuitem.close" label="Close" command="_CtudYKmtEeaqitUZEC3Sew"/>
+        <children xsi:type="menu:HandledMenuItem" xmi:id="_1rv3AKm7EeaqitUZEC3Sew" elementId="com.todolists.handledmenuitem.closeall" label="Close all" command="_3F5g0Km7EeaqitUZEC3Sew"/>
+        <children xsi:type="menu:MenuSeparator" xmi:id="_zm1Y8Km7EeaqitUZEC3Sew" elementId="com.todolists.menuseparator.1"/>
+        <children xsi:type="menu:HandledMenuItem" xmi:id="_ixQN0Km5EeaqitUZEC3Sew" elementId="com.todolists.handledmenuitem.delete" label="Delete" command="_lPjboKedEea32f_jy4otqw"/>
+      </children>
+      <children xsi:type="menu:Menu" xmi:id="_TpsmELTAEeaREoFAUxOmQA" elementId="com.todolists.menu.table" label="Table">
+        <children xsi:type="menu:HandledMenuItem" xmi:id="_Xq7nwL2QEeaDxcdQnWCP1w" elementId="com.todolists.handledmenuitem.createtable" label="Create table" command="_qjSykKuBEea7IeZ9V35Y-A"/>
+        <children xsi:type="menu:HandledMenuItem" xmi:id="_VbWJ4LTAEeaREoFAUxOmQA" elementId="com.todolists.handledmenuitem.save" label="Save table" command="_XVcfELTAEeaREoFAUxOmQA"/>
+        <children xsi:type="menu:HandledMenuItem" xmi:id="_uH_qsL2QEeaDxcdQnWCP1w" elementId="com.todolists.handledmenuitem.deletetable" label="Delete table" command="_YIJOsLS9EeaREoFAUxOmQA"/>
+      </children>
+      <children xsi:type="menu:Menu" xmi:id="_XmuyUAHuEeevws-ABxtBig" elementId="com.todolists.menu.todo" label="Todo">
+        <children xsi:type="menu:HandledMenuItem" xmi:id="_aIqjkAHuEeevws-ABxtBig" elementId="com.todolists.handledmenuitem.newtodo" label="New todo" command="_FNYhQLEBEea3TOOsULhG-Q"/>
+      </children>
+      <children xsi:type="menu:Menu" xmi:id="_NxnUsL--Eeal2MvZvQ7Mgg" elementId="com.todolists.menu.help" label="Help">
+        <children xsi:type="menu:HandledMenuItem" xmi:id="_QASLsL--Eeal2MvZvQ7Mgg" elementId="com.todolists.handledmenuitem.about" label="About" command="_SFioAL--Eeal2MvZvQ7Mgg"/>
+      </children>
+    </mainMenu>
+    <trimBars xmi:id="_zpa00JvDEea4BfF-DHnP4A" elementId="com.todolists.trimbar.top">
+      <children xsi:type="menu:ToolBar" xmi:id="_1RpW4JvDEea4BfF-DHnP4A" elementId="com.todolists.toolbar.0">
+        <children xsi:type="menu:HandledToolItem" xmi:id="_3Rd5kJvDEea4BfF-DHnP4A" elementId="com.todolists.handledtoolitem.newproject" iconURI="platform:/plugin/com.todolists/icons/newprj.gif" command="_W3zqoJvDEea4BfF-DHnP4A"/>
+        <children xsi:type="menu:HandledToolItem" xmi:id="_aRvRkKm-EeaqitUZEC3Sew" elementId="com.todolists.handledtoolitem.deleteproject" iconURI="platform:/plugin/com.todolists/icons/deleteprj.gif" command="_lPjboKedEea32f_jy4otqw"/>
+        <children xsi:type="menu:HandledToolItem" xmi:id="_wdmFkL2PEeaDxcdQnWCP1w" elementId="com.todolists.handledtoolitem.savetable" iconURI="platform:/plugin/com.todolists/icons/save_edit.png" command="_XVcfELTAEeaREoFAUxOmQA"/>
+      </children>
+    </trimBars>
+  </children>
+  <handlers xmi:id="_YX_D8JvDEea4BfF-DHnP4A" elementId="com.todolists.handler.newproject" contributionURI="bundleclass://com.todolists/com.todolists.handlers.NewProjectHandler" command="_W3zqoJvDEea4BfF-DHnP4A"/>
+  <handlers xmi:id="_oUDucKedEea32f_jy4otqw" elementId="com.todolists.handler.deleteproject" contributionURI="bundleclass://com.todolists/com.todolists.handlers.DeleteProjectHandler" command="_lPjboKedEea32f_jy4otqw"/>
+  <handlers xmi:id="_FRVCkKmtEeaqitUZEC3Sew" elementId="com.todolists.handler.closeproject" contributionURI="bundleclass://com.todolists/com.todolists.handlers.CloseProjectHandler" command="_CtudYKmtEeaqitUZEC3Sew"/>
+  <handlers xmi:id="_zTo4gKmtEeaqitUZEC3Sew" elementId="com.todolists.handler.openproject" contributionURI="bundleclass://com.todolists/com.todolists.handlers.OpenProjectHandler" command="_x3Fa8KmtEeaqitUZEC3Sew"/>
+  <handlers xmi:id="_7IUNYKm7EeaqitUZEC3Sew" elementId="com.todolists.handler.closeallprojects" contributionURI="bundleclass://com.todolists/com.todolists.handlers.CloseAllProjectsHandler" command="_3F5g0Km7EeaqitUZEC3Sew"/>
+  <handlers xmi:id="_sP3pIKuBEea7IeZ9V35Y-A" elementId="com.todolists.handler.createtable" contributionURI="bundleclass://com.todolists/com.todolists.handlers.CreateTableHandler" command="_qjSykKuBEea7IeZ9V35Y-A"/>
+  <handlers xmi:id="_zLKHYLD_Eea3TOOsULhG-Q" elementId="com.todolists.handler.opentable" contributionURI="bundleclass://com.todolists/com.todolists.handlers.OpenTableHandler" command="_wRqxwLD_Eea3TOOsULhG-Q"/>
+  <handlers xmi:id="_GLfIQLEBEea3TOOsULhG-Q" elementId="com.todolists.handler.newtodo" contributionURI="bundleclass://com.todolists/com.todolists.handlers.NewTodoHandler" command="_FNYhQLEBEea3TOOsULhG-Q"/>
+  <handlers xmi:id="_ZmW5ILS9EeaREoFAUxOmQA" elementId="com.todolists.handler.deletetable" contributionURI="bundleclass://com.todolists/com.todolists.handlers.DeleteTableHandler" command="_YIJOsLS9EeaREoFAUxOmQA"/>
+  <handlers xmi:id="_Yt2ccLTAEeaREoFAUxOmQA" elementId="com.todolists.handler.savetable" contributionURI="bundleclass://com.todolists/com.todolists.handlers.SaveTableHandler" command="_XVcfELTAEeaREoFAUxOmQA"/>
+  <handlers xmi:id="_Tj8fsL--Eeal2MvZvQ7Mgg" elementId="com.todolists.handler.about" contributionURI="bundleclass://com.todolists/com.todolists.handlers.AboutHandler" command="_SFioAL--Eeal2MvZvQ7Mgg"/>
+  <descriptors xmi:id="_5H0doLEAEea3TOOsULhG-Q" elementId="com.todolists.partdescriptor.todotable" label="ToDo table" allowMultiple="true" contributionURI="bundleclass://com.todolists/com.todolists.parts.TablesPart">
+    <menus xsi:type="menu:PopupMenu" xmi:id="_AgGSwLEBEea3TOOsULhG-Q" elementId="com.todolists.popupmenu.newtodo" label="New todo">
+      <children xsi:type="menu:HandledMenuItem" xmi:id="_C3868LEBEea3TOOsULhG-Q" elementId="com.todolists.handledmenuitem.newtodo" label="New todo" command="_FNYhQLEBEea3TOOsULhG-Q"/>
+    </menus>
+  </descriptors>
+  <commands xmi:id="_W3zqoJvDEea4BfF-DHnP4A" elementId="com.todolists.command.newproject" commandName="New project"/>
+  <commands xmi:id="_lPjboKedEea32f_jy4otqw" elementId="com.todolists.command.deleteproject" commandName="Delete project"/>
+  <commands xmi:id="_CtudYKmtEeaqitUZEC3Sew" elementId="com.todolists.command.closeproject" commandName="Close project"/>
+  <commands xmi:id="_x3Fa8KmtEeaqitUZEC3Sew" elementId="com.todolists.command.openproject" commandName="Open project"/>
+  <commands xmi:id="_3F5g0Km7EeaqitUZEC3Sew" elementId="com.todolists.command.closeallprojects" commandName="Close all projects"/>
+  <commands xmi:id="_qjSykKuBEea7IeZ9V35Y-A" elementId="com.todolists.command.createtable" commandName="Create table"/>
+  <commands xmi:id="_wRqxwLD_Eea3TOOsULhG-Q" elementId="com.todolists.command.opentable" commandName="Open table"/>
+  <commands xmi:id="_FNYhQLEBEea3TOOsULhG-Q" elementId="com.todolists.command.newtodo" commandName="New todo"/>
+  <commands xmi:id="_YIJOsLS9EeaREoFAUxOmQA" elementId="com.todolists.command.deletetable" commandName="Delete table"/>
+  <commands xmi:id="_XVcfELTAEeaREoFAUxOmQA" elementId="com.todolists.command.savetable" commandName="Save table"/>
+  <commands xmi:id="_SFioAL--Eeal2MvZvQ7Mgg" elementId="com.todolists.command.about" commandName="About"/>
+  <addons xmi:id="_iZFK4ZvCEea4BfF-DHnP4A" elementId="org.eclipse.e4.core.commands.service" contributionURI="bundleclass://org.eclipse.e4.core.commands/org.eclipse.e4.core.commands.CommandServiceAddon"/>
+  <addons xmi:id="_iZFK4pvCEea4BfF-DHnP4A" elementId="org.eclipse.e4.ui.contexts.service" contributionURI="bundleclass://org.eclipse.e4.ui.services/org.eclipse.e4.ui.services.ContextServiceAddon"/>
+  <addons xmi:id="_iZFK45vCEea4BfF-DHnP4A" elementId="org.eclipse.e4.ui.bindings.service" contributionURI="bundleclass://org.eclipse.e4.ui.bindings/org.eclipse.e4.ui.bindings.BindingServiceAddon"/>
+  <addons xmi:id="_iZFK5JvCEea4BfF-DHnP4A" elementId="org.eclipse.e4.ui.workbench.commands.model" contributionURI="bundleclass://org.eclipse.e4.ui.workbench/org.eclipse.e4.ui.internal.workbench.addons.CommandProcessingAddon"/>
+  <addons xmi:id="_iZFK5ZvCEea4BfF-DHnP4A" elementId="org.eclipse.e4.ui.workbench.contexts.model" contributionURI="bundleclass://org.eclipse.e4.ui.workbench/org.eclipse.e4.ui.internal.workbench.addons.ContextProcessingAddon"/>
+  <addons xmi:id="_iZFK5pvCEea4BfF-DHnP4A" elementId="org.eclipse.e4.ui.workbench.bindings.model" contributionURI="bundleclass://org.eclipse.e4.ui.workbench.swt/org.eclipse.e4.ui.workbench.swt.util.BindingProcessingAddon"/>
+  <addons xmi:id="_iZFK55vCEea4BfF-DHnP4A" elementId="org.eclipse.e4.ui.workbench.handler.model" contributionURI="bundleclass://org.eclipse.e4.ui.workbench/org.eclipse.e4.ui.internal.workbench.addons.HandlerProcessingAddon"/>
+</application:Application>
