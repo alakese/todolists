@@ -5,7 +5,6 @@ import java.io.File;
 import java.io.IOException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.HashMap;
@@ -45,8 +44,17 @@ import org.eclipse.nebula.widgets.nattable.data.convert.DefaultDateDisplayConver
 import org.eclipse.nebula.widgets.nattable.edit.EditConfigAttributes;
 import org.eclipse.nebula.widgets.nattable.edit.editor.ComboBoxCellEditor;
 import org.eclipse.nebula.widgets.nattable.edit.editor.DateCellEditor;
+import org.eclipse.nebula.widgets.nattable.edit.editor.ICellEditor;
 import org.eclipse.nebula.widgets.nattable.edit.editor.MultiLineTextCellEditor;
+import org.eclipse.nebula.widgets.nattable.extension.glazedlists.GlazedListsEventLayer;
 import org.eclipse.nebula.widgets.nattable.extension.glazedlists.GlazedListsSortModel;
+import org.eclipse.nebula.widgets.nattable.extension.glazedlists.filterrow.DefaultGlazedListsFilterStrategy;
+import org.eclipse.nebula.widgets.nattable.filterrow.FilterRowDataLayer;
+import org.eclipse.nebula.widgets.nattable.filterrow.FilterRowHeaderComposite;
+import org.eclipse.nebula.widgets.nattable.filterrow.FilterRowRegularExpressionConverter;
+import org.eclipse.nebula.widgets.nattable.filterrow.FilterRowTextCellEditor;
+import org.eclipse.nebula.widgets.nattable.filterrow.TextMatchingMode;
+import org.eclipse.nebula.widgets.nattable.filterrow.config.FilterRowConfigAttributes;
 import org.eclipse.nebula.widgets.nattable.grid.GridRegion;
 import org.eclipse.nebula.widgets.nattable.grid.data.DefaultColumnHeaderDataProvider;
 import org.eclipse.nebula.widgets.nattable.grid.data.DefaultCornerDataProvider;
@@ -56,6 +64,7 @@ import org.eclipse.nebula.widgets.nattable.grid.layer.CornerLayer;
 import org.eclipse.nebula.widgets.nattable.grid.layer.DefaultColumnHeaderDataLayer;
 import org.eclipse.nebula.widgets.nattable.grid.layer.GridLayer;
 import org.eclipse.nebula.widgets.nattable.grid.layer.RowHeaderLayer;
+import org.eclipse.nebula.widgets.nattable.layer.AbstractLayerTransform;
 import org.eclipse.nebula.widgets.nattable.layer.DataLayer;
 import org.eclipse.nebula.widgets.nattable.layer.ILayer;
 import org.eclipse.nebula.widgets.nattable.layer.cell.ColumnOverrideLabelAccumulator;
@@ -68,6 +77,7 @@ import org.eclipse.nebula.widgets.nattable.style.HorizontalAlignmentEnum;
 import org.eclipse.nebula.widgets.nattable.style.Style;
 import org.eclipse.nebula.widgets.nattable.ui.binding.UiBindingRegistry;
 import org.eclipse.nebula.widgets.nattable.ui.matcher.MouseEventMatcher;
+import org.eclipse.nebula.widgets.nattable.ui.menu.HeaderMenuConfiguration;
 import org.eclipse.nebula.widgets.nattable.ui.menu.PopupMenuAction;
 import org.eclipse.nebula.widgets.nattable.ui.menu.PopupMenuBuilder;
 import org.eclipse.nebula.widgets.nattable.viewport.ViewportLayer;
@@ -85,8 +95,10 @@ import com.todolists.model.ITodoService;
 import com.todolists.model.ITodoServiceProvider;
 
 import ca.odell.glazedlists.EventList;
+import ca.odell.glazedlists.FilterList;
 import ca.odell.glazedlists.GlazedLists;
 import ca.odell.glazedlists.SortedList;
+import ca.odell.glazedlists.TransformedList;
 
 public class TablesPart {
 	/** Logger */
@@ -111,9 +123,20 @@ public class TablesPart {
 	/* property names of the Person class */
 	String[] propertyNames = { "state", "description", "action", "result", "endDate" };
 
-	private transient final EventList<Todo> tableData = GlazedLists.eventList(new ArrayList<Todo>());
 	private transient NatTable natTable;
+	/**
+	 * Always encapsulate the body layer stack in an AbstractLayerTransform to
+	 * ensure that the index transformations are performed in later commands.
+	 */
+	private transient BodyLayerStack<Todo> bodyLayerStack = null;
 
+	/**
+	 *
+	 * @param parent
+	 * @param file
+	 * @param menuService
+	 * @param part
+	 */
 	@PostConstruct
 	public void createControls(final Composite parent,
 			@Optional @Named(IServiceConstants.ACTIVE_SELECTION) final IFile file, final EMenuService menuService,
@@ -141,48 +164,49 @@ public class TablesPart {
 			this.todoServiceProvider.addTodoService(this.todoService);
 		}
 
-		/* Add the infos into the table-list */
-		for (final Todo todo : this.todoService.getTodos()) {
-			this.tableData.add(todo);
-		}
-
-		/* Add the sort functionality */
-		final SortedList<Todo> sortedList = new SortedList<>(this.tableData, null);
-
 		/* Do nattable stuff */
-		// final TableColumnAccessor accessor = new TableColumnAccessor();
-		final IColumnPropertyAccessor<Todo> accessor = new TableColumnAccessor();
-		final IDataProvider bodyDataProvider = new ListDataProvider<Todo>(sortedList, accessor);
-		final DataLayer bodyDataLayer = new DataLayer(bodyDataProvider);
-		bodyDataLayer.setColumnPercentageSizing(true);
+		final IColumnPropertyAccessor<Todo> columnPropertyAccessor = new TableColumnAccessor();
 
-		final SelectionLayer selectionLayer = new SelectionLayer(bodyDataLayer);
-		final ViewportLayer viewportLayer = new ViewportLayer(selectionLayer);
+		if (null == this.bodyLayerStack) {
+			this.bodyLayerStack = new BodyLayerStack<Todo>(this.todoService.getTodos(), columnPropertyAccessor);
+		}
 
 		// build the column header layer stack
 		final IDataProvider columnHeaderDataProvider = new DefaultColumnHeaderDataProvider(this.propertyNames,
 				propertyToLabelMap);
 		final DataLayer columnHeaderDataLayer = new DefaultColumnHeaderDataLayer(columnHeaderDataProvider);
-		final ILayer columnHeaderLayer = new ColumnHeaderLayer(columnHeaderDataLayer, viewportLayer, selectionLayer);
+		final ILayer columnHeaderLayer = new ColumnHeaderLayer(columnHeaderDataLayer, this.bodyLayerStack,
+				this.bodyLayerStack.getSelectionLayer());
 
 		final SortHeaderLayer<Todo> sortHeaderLayer = new SortHeaderLayer<Todo>(columnHeaderLayer,
-				new GlazedListsSortModel<Todo>(sortedList, accessor, configRegistry, columnHeaderDataLayer));
+				new GlazedListsSortModel<Todo>(this.bodyLayerStack.getSortedList(), columnPropertyAccessor,
+						configRegistry, columnHeaderDataLayer));
+		final FilterRowHeaderComposite<Todo> filterRowHeaderLayer = new FilterRowHeaderComposite<Todo>(
+				new DefaultGlazedListsFilterStrategy<Todo>(this.bodyLayerStack.getFilterList(), columnPropertyAccessor,
+						configRegistry),
+				sortHeaderLayer, columnHeaderDataLayer.getDataProvider(), configRegistry);
 
 		/* build the row header layer stack */
-		final IDataProvider rowHeaderDataProvider = new DefaultRowHeaderDataProvider(bodyDataProvider);
+		final IDataProvider rowHeaderDataProvider = new DefaultRowHeaderDataProvider(
+				this.bodyLayerStack.getBodyDataProvider());
 		final DataLayer rowHeaderDataLayer = new DataLayer(rowHeaderDataProvider, 40, 20);
-		final ILayer rowHeaderLayer = new RowHeaderLayer(rowHeaderDataLayer, viewportLayer, selectionLayer);
+		final ILayer rowHeaderLayer = new RowHeaderLayer(rowHeaderDataLayer, this.bodyLayerStack,
+				this.bodyLayerStack.getSelectionLayer());
 
 		/* build the corner layer stack */
-		final ILayer cornerLayer = new CornerLayer(
-				new DataLayer(new DefaultCornerDataProvider(columnHeaderDataProvider, rowHeaderDataProvider)),
-				rowHeaderLayer, columnHeaderLayer);
+		final IDataProvider cornerDataProvider = new DefaultCornerDataProvider(columnHeaderDataProvider,
+				rowHeaderDataProvider);
+		final DataLayer cornerDataLayer = new DataLayer(cornerDataProvider);
+		final ILayer cornerLayer = new CornerLayer(cornerDataLayer, rowHeaderLayer, filterRowHeaderLayer);
+
 		/* Put sortHeaderLayer hier as columnHeaderLayer */
-		final GridLayer gridLayer = new GridLayer(viewportLayer, sortHeaderLayer, rowHeaderLayer, cornerLayer);
+		final GridLayer gridLayer = new GridLayer(this.bodyLayerStack, filterRowHeaderLayer, rowHeaderLayer,
+				cornerLayer);
 
 		/* add cols */
-		final ColumnOverrideLabelAccumulator columnLabelAccumulator = new ColumnOverrideLabelAccumulator(bodyDataLayer);
-		bodyDataLayer.setConfigLabelAccumulator(columnLabelAccumulator);
+		final ColumnOverrideLabelAccumulator columnLabelAccumulator = new ColumnOverrideLabelAccumulator(
+				this.bodyLayerStack);
+		this.bodyLayerStack.setConfigLabelAccumulator(columnLabelAccumulator);
 		columnLabelAccumulator.registerColumnOverrides(0, TablesPart.COLUMN_ONE_LABEL);
 		columnLabelAccumulator.registerColumnOverrides(1, TablesPart.COLUMN_TWO_LABEL);
 		columnLabelAccumulator.registerColumnOverrides(2, TablesPart.COLUMN_THREE_LABEL);
@@ -194,7 +218,13 @@ public class TablesPart {
 		this.natTable.addConfiguration(new DefaultNatTableStyleConfiguration());
 		this.natTable.addConfiguration(new EditorConfiguration());
 		this.natTable.addConfiguration(new SingleClickSortConfiguration());
-
+		this.natTable.addConfiguration(new FilterRowConfiguration());
+		this.natTable.addConfiguration(new HeaderMenuConfiguration(this.natTable) {
+			@Override
+			protected PopupMenuBuilder createRowHeaderMenu(final NatTable natTable) {
+				return super.createRowHeaderMenu(natTable).withHideRowMenuItem().withShowAllRowsMenuItem();
+			}
+		});
 		/* TODO add contextmenu */
 		menuService.registerContextMenu(this.natTable, "com.todolists.popupmenu.newtodo");
 
@@ -240,7 +270,8 @@ public class TablesPart {
 		final Map<String, String> persistedState = part.getPersistedState();
 		persistedState.put("partstate", "closed");
 		/* Clear the nattable */
-		this.tableData.clear();
+		// this.tableData.clear();
+		this.bodyLayerStack.clearConfiguration();
 	}
 
 	/**
@@ -257,7 +288,8 @@ public class TablesPart {
 		final ITodoService todoService = this.todoServiceProvider.getTodoService(fileName);
 
 		TablesPart.LOGGER.debug("Save the part [{}]", fileName);
-		for (final Todo todo : this.tableData) {
+		// for (final Todo todo : this.tableData) {
+		for (final Todo todo : this.bodyLayerStack.getEventList()) {
 			TablesPart.LOGGER.debug("Saving [{}]", todo.toString());
 			// Save in model
 			todoService.saveTodo(todo);
@@ -369,7 +401,8 @@ public class TablesPart {
 			/* Add the new item */
 			final Todo todo = this.todoService.createTodo("New", "<empty>", "<empty>", "<empty>", new Date());
 			this.todoService.saveTodo(todo);
-			this.tableData.add(todo);
+			// this.tableData.add(todo);
+			this.bodyLayerStack.addTodoToList(todo);
 			/* If a new todo inserted, then it is dirty */
 			partService.getActivePart().setDirty(true);
 			// TablesPart.this.dirty.setDirty(true);
@@ -573,9 +606,129 @@ public class TablesPart {
 	 *            Data
 	 */
 	public void addNewRow(final Todo todo) {
-		this.tableData.add(todo);
+		// this.tableData.add(todo);
+		this.bodyLayerStack.addTodoToList(todo);
 		this.natTable.refresh();
 		// New Item
 		TablesPart.this.dirty.setDirty(false);
+	}
+
+	/**
+	 * Always encapsulate the body layer stack in an AbstractLayerTransform to
+	 * ensure that the index transformations are performed in later commands.
+	 *
+	 * @param <T>
+	 */
+	class BodyLayerStack<T> extends AbstractLayerTransform {
+		private final FilterList<T> filterList;
+		private final IDataProvider bodyDataProvider;
+		private final SelectionLayer selectionLayer;
+		private final EventList<T> eventList;
+		private final SortedList<T> sortedList;
+
+		public BodyLayerStack(final List<T> values, final IColumnPropertyAccessor<T> columnPropertyAccessor) {
+			this.eventList = GlazedLists.eventList(values);
+			final TransformedList<T, T> rowObjectsGlazedList = GlazedLists.threadSafeList(this.eventList);
+
+			this.sortedList = new SortedList<T>(rowObjectsGlazedList, null);
+			// wrap the SortedList with the FilterList
+			this.filterList = new FilterList<T>(this.sortedList);
+
+			this.bodyDataProvider = new ListDataProvider<T>(this.filterList, columnPropertyAccessor);
+			final DataLayer bodyDataLayer = new DataLayer(this.getBodyDataProvider());
+
+			// layer for event handling of GlazedLists and PropertyChanges
+			final GlazedListsEventLayer<T> glazedListsEventLayer = new GlazedListsEventLayer<T>(bodyDataLayer,
+					this.filterList);
+			this.selectionLayer = new SelectionLayer(glazedListsEventLayer);
+			final ViewportLayer viewportLayer = new ViewportLayer(this.getSelectionLayer());
+
+			this.setUnderlyingLayer(viewportLayer);
+		}
+
+		public SortedList<T> getSortedList() {
+			return this.sortedList;
+		}
+
+		public SelectionLayer getSelectionLayer() {
+			return this.selectionLayer;
+		}
+
+		public FilterList<T> getFilterList() {
+			return this.filterList;
+		}
+
+		public IDataProvider getBodyDataProvider() {
+			return this.bodyDataProvider;
+		}
+
+		public EventList<T> getEventList() {
+			return this.eventList;
+		}
+
+		public void clearEventList() {
+			this.eventList.clear();
+		}
+
+		public void addTodoToList(final T todo) {
+			this.eventList.add(todo);
+		}
+	}
+
+	/**
+	 * Filterclass
+	 *
+	 * @author user
+	 *
+	 */
+	class FilterRowConfiguration extends AbstractRegistryConfiguration {
+
+		@Override
+		public void configureRegistry(final IConfigRegistry configRegistry) {
+
+			// // register the FilterRowTextCellEditor in the first column which
+			// // immediately commits on key press
+			// configRegistry.registerConfigAttribute(EditConfigAttributes.CELL_EDITOR,
+			// new FilterRowTextCellEditor(),
+			// DisplayMode.NORMAL,
+			// FilterRowDataLayer.FILTER_ROW_COLUMN_LABEL_PREFIX + 0);
+			//
+			// configRegistry.registerConfigAttribute(FilterRowConfigAttributes.TEXT_MATCHING_MODE,
+			// TextMatchingMode.REGULAR_EXPRESSION, DisplayMode.NORMAL,
+			// FilterRowDataLayer.FILTER_ROW_COLUMN_LABEL_PREFIX + 0);
+			//
+			// configRegistry.registerConfigAttribute(CellConfigAttributes.DISPLAY_CONVERTER,
+			// new FilterRowRegularExpressionConverter(), DisplayMode.NORMAL,
+			// FilterRowDataLayer.FILTER_ROW_COLUMN_LABEL_PREFIX + 0);
+
+			// register a combo box cell editor for the gender column in the
+			// filter row the label is set automatically to the value of
+			// FilterRowDataLayer.FILTER_ROW_COLUMN_LABEL_PREFIX + column
+			// position
+			final ICellEditor comboBoxCellEditor = new ComboBoxCellEditor(
+					Arrays.asList("New", "In Progress", "Finished"));
+
+			configRegistry.registerConfigAttribute(EditConfigAttributes.CELL_EDITOR, comboBoxCellEditor,
+					DisplayMode.NORMAL, FilterRowDataLayer.FILTER_ROW_COLUMN_LABEL_PREFIX + 0);
+
+			configRegistry.registerConfigAttribute(FilterRowConfigAttributes.TEXT_MATCHING_MODE, TextMatchingMode.EXACT,
+					DisplayMode.NORMAL, FilterRowDataLayer.FILTER_ROW_COLUMN_LABEL_PREFIX + 0);
+
+			for (int i = 1; i < 5; ++i) {
+				// register the FilterRowTextCellEditor in the first column
+				// which
+				// immediately commits on key press
+				configRegistry.registerConfigAttribute(EditConfigAttributes.CELL_EDITOR, new FilterRowTextCellEditor(),
+						DisplayMode.NORMAL, FilterRowDataLayer.FILTER_ROW_COLUMN_LABEL_PREFIX + i);
+
+				configRegistry.registerConfigAttribute(FilterRowConfigAttributes.TEXT_MATCHING_MODE,
+						TextMatchingMode.REGULAR_EXPRESSION, DisplayMode.NORMAL,
+						FilterRowDataLayer.FILTER_ROW_COLUMN_LABEL_PREFIX + i);
+
+				configRegistry.registerConfigAttribute(CellConfigAttributes.DISPLAY_CONVERTER,
+						new FilterRowRegularExpressionConverter(), DisplayMode.NORMAL,
+						FilterRowDataLayer.FILTER_ROW_COLUMN_LABEL_PREFIX + i);
+			}
+		}
 	}
 }
