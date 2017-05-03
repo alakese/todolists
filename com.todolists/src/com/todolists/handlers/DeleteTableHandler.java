@@ -49,12 +49,13 @@ public class DeleteTableHandler {
 		for (final MPart mPart : parts) {
 			final String foundLabel = mPart.getLabel();
 			if ((foundLabel != null) && foundLabel.equals(tableName)) {
+				DeleteTableHandler.LOGGER.debug("Editor is opened. Closing...");
 				partService.hidePart(mPart);
-				return;
 			}
 		}
 
 		// delete the table
+		DeleteTableHandler.LOGGER.debug("Deleting the service");
 		final ITodoService todoService = this.todoServiceProvider.getTodoService(tableName);
 		this.todoServiceProvider.deleteTodoService(todoService);
 
@@ -64,9 +65,11 @@ public class DeleteTableHandler {
 			return;
 		}
 
+		DeleteTableHandler.LOGGER.debug("Deleting the DB [{}]", file.getName());
 		file.delete(true, null);
 
 		/* Send an event */
+		DeleteTableHandler.LOGGER.debug("Sending deleted-event [{}]", file.getName());
 		broker.post(ProjectEventConstants.TOPIC_TODO, ProjectEventConstants.TOPIC_TABLE_DELETED);
 
 		DeleteTableHandler.LOGGER.debug("The table deleted successfully.", tableName);
