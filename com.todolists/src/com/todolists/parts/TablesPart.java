@@ -51,7 +51,6 @@ import org.eclipse.nebula.widgets.nattable.extension.glazedlists.GlazedListsSort
 import org.eclipse.nebula.widgets.nattable.extension.glazedlists.filterrow.DefaultGlazedListsFilterStrategy;
 import org.eclipse.nebula.widgets.nattable.filterrow.FilterRowDataLayer;
 import org.eclipse.nebula.widgets.nattable.filterrow.FilterRowHeaderComposite;
-import org.eclipse.nebula.widgets.nattable.filterrow.FilterRowRegularExpressionConverter;
 import org.eclipse.nebula.widgets.nattable.filterrow.FilterRowTextCellEditor;
 import org.eclipse.nebula.widgets.nattable.filterrow.TextMatchingMode;
 import org.eclipse.nebula.widgets.nattable.filterrow.config.FilterRowConfigAttributes;
@@ -722,12 +721,13 @@ public class TablesPart {
 						DisplayMode.NORMAL, FilterRowDataLayer.FILTER_ROW_COLUMN_LABEL_PREFIX + i);
 
 				configRegistry.registerConfigAttribute(FilterRowConfigAttributes.TEXT_MATCHING_MODE,
-						TextMatchingMode.REGULAR_EXPRESSION, DisplayMode.NORMAL,
+						TextMatchingMode.CONTAINS, DisplayMode.NORMAL,
 						FilterRowDataLayer.FILTER_ROW_COLUMN_LABEL_PREFIX + i);
 
-				configRegistry.registerConfigAttribute(CellConfigAttributes.DISPLAY_CONVERTER,
-						new FilterRowRegularExpressionConverter(), DisplayMode.NORMAL,
-						FilterRowDataLayer.FILTER_ROW_COLUMN_LABEL_PREFIX + i);
+				// configRegistry.registerConfigAttribute(CellConfigAttributes.DISPLAY_CONVERTER,
+				// new FilterRowRegularExpressionConverter(),
+				// DisplayMode.NORMAL,
+				// FilterRowDataLayer.FILTER_ROW_COLUMN_LABEL_PREFIX + i);
 			}
 		}
 	}
